@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+	<meta charset="UTF-8"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1"/>
+	<title>Dashboard — HMS Auth</title>
+	<link rel="stylesheet" th:href="@{/css/app.css}"/>
+</head>
+<body>
+	<div th:replace="~{fragments :: navbar}"></div>
+	<main>
+		<div class="card">
+			<h1>Dashboard</h1>
+			<p>Signed in as <strong th:text="${username}">user</strong></p>
+			<p class="muted">Manage roles, users, and permissions from the navigation bar. REST clients can still use JWT on <code>/api/**</code> endpoints.</p>
+			<div style="margin-top:1rem;display:flex;flex-wrap:wrap;gap:0.5rem;">
+				<a class="btn btn-primary" th:href="@{/roles}">Roles</a>
+				<a class="btn btn-secondary" th:href="@{/users}">Users</a>
+				<a class="btn btn-secondary" th:href="@{/permissions}">Permissions</a>
+			</div>
+		</div>
+	</main>
+</body>
+</html>

@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1"/>
+	<title>Error — HMS Auth</title>
+	<link rel="stylesheet" th:href="@{/css/app.css}"/>
+</head>
+<body>
+	<div th:replace="~{fragments :: navbar}"></div>
+	<main>
+		<div class="card">
+			<h1>Something went wrong</h1>
+			<p class="alert alert-error" th:text="${message}">Error</p>
+			<a class="btn btn-secondary" th:href="@{/dashboard}">Back to dashboard</a>
+		</div>
+	</main>
+</body>
+</html>

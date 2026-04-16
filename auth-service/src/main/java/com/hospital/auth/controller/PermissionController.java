@@ -30,14 +30,12 @@ public class PermissionController {
 		this.permissionService = permissionService;
 	}
 
-	/** UML: addPermission */
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
 	public Permission addPermission(@Valid @RequestBody PermissionRequest request) {
 		return permissionService.addPermission(request);
 	}
 
-	/** UML: editPermission */
 	@PutMapping("/{permissionId}")
 	public Permission editPermission(
 			@PathVariable String permissionId,
@@ -45,14 +43,12 @@ public class PermissionController {
 		return permissionService.editPermission(permissionId, request);
 	}
 
-	/** UML: deletePermission */
 	@DeleteMapping("/{permissionId}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void deletePermission(@PathVariable String permissionId) {
 		permissionService.deletePermission(permissionId);
 	}
 
-	/** UML: searchPermission — optional {@code title} and {@code module}; lists all when both omitted or blank. */
 	@GetMapping("/search")
 	public List<Permission> searchPermissions(
 			@RequestParam(required = false) String title,

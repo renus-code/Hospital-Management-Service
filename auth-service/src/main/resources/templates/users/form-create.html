@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1"/>
+	<title>New user — HMS Auth</title>
+	<link rel="stylesheet" th:href="@{/css/app.css}"/>
+</head>
+<body>
+	<div th:replace="~{fragments :: navbar}"></div>
+	<main>
+		<div class="card" style="max-width:520px;">
+			<h1>New user</h1>
+			<form th:action="@{/users}" th:object="${userRequest}" method="post" class="form-grid">
+				<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+				<div>
+					<label for="userName">Name</label>
+					<input id="userName" type="text" th:field="*{userName}" required="required"/>
+					<p class="field-error" th:if="${#fields.hasErrors('userName')}" th:errors="*{userName}"></p>
+				</div>
+				<div>
+					<label for="userEmail">Email</label>
+					<input id="userEmail" type="email" th:field="*{userEmail}" required="required"/>
+					<p class="field-error" th:if="${#fields.hasErrors('userEmail')}" th:errors="*{userEmail}"></p>
+				</div>
+				<div>
+					<label for="userPassword">Password</label>
+					<input id="userPassword" type="password" th:field="*{userPassword}" required="required"/>
+					<p class="field-error" th:if="${#fields.hasErrors('userPassword')}" th:errors="*{userPassword}"></p>
+				</div>
+				<div>
+					<label for="userDob">Date of birth</label>
+					<input id="userDob" type="date" th:field="*{userDob}"/>
+				</div>
+				<div>
+					<label for="userAddress">Address</label>
+					<textarea id="userAddress" th:field="*{userAddress}" rows="2"></textarea>
+				</div>
+				<div>
+					<label for="userRoleId">Role</label>
+					<select id="userRoleId" th:field="*{userRoleId}">
+						<option value="">— Default (USER) —</option>
+						<option th:each="r : ${roles}" th:value="${r.roleId}" th:text="${r.roleTitle}"></option>
+					</select>
+				</div>
+				<div>
+					<button type="submit" class="btn btn-primary">Create</button>
+					<a class="btn btn-secondary" th:href="@{/users}">Cancel</a>
+				</div>
+			</form>
+		</div>
+	</main>
+</body>
+</html>

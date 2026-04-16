@@ -1,7 +1,10 @@
 package com.hospital.auth.controller;
 
-import java.util.List;
-
+import com.hospital.auth.dto.UserRequest;
+import com.hospital.auth.dto.UserResponse;
+import com.hospital.auth.dto.UserUpdateRequest;
+import com.hospital.auth.service.UserService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,12 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.hospital.auth.dto.UserRequest;
-import com.hospital.auth.dto.UserResponse;
-import com.hospital.auth.dto.UserUpdateRequest;
-import com.hospital.auth.service.UserService;
-
-import jakarta.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/users")
@@ -31,27 +29,23 @@ public class UserController {
 		this.userService = userService;
 	}
 
-	/** UML: addUser */
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
 	public UserResponse addUser(@Valid @RequestBody UserRequest request) {
 		return userService.addUser(request);
 	}
 
-	/** UML: editUser */
 	@PutMapping("/{userId}")
 	public UserResponse editUser(@PathVariable String userId, @Valid @RequestBody UserUpdateRequest request) {
 		return userService.editUser(userId, request);
 	}
 
-	/** UML: deleteUser */
 	@DeleteMapping("/{userId}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void deleteUser(@PathVariable String userId) {
 		userService.deleteUser(userId);
 	}
 
-	/** UML: searchUser — optional {@code name} and {@code email}; lists all when both omitted or blank. */
 	@GetMapping("/search")
 	public List<UserResponse> searchUsers(
 			@RequestParam(required = false) String name,

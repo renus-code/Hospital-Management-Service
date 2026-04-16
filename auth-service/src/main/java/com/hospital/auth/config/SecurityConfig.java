@@ -2,6 +2,8 @@ package com.hospital.auth.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -23,9 +25,12 @@ public class SecurityConfig {
 		this.jwtAuthenticationFilter = jwtAuthenticationFilter;
 	}
 
+	/** REST API: JWT, stateless. */
 	@Bean
-	SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+	@Order(1)
+	SecurityFilterChain apiSecurityFilterChain(HttpSecurity http) throws Exception {
 		http
+				.securityMatcher("/api/**")
 				.csrf(AbstractHttpConfigurer::disable)
 				.sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 				.authorizeHttpRequests(auth -> auth
@@ -35,9 +40,29 @@ public class SecurityConfig {
 		return http.build();
 	}
 
+	/** Thymeleaf UI: form login + HTTP session + CSRF. */
+	@Bean
+	@Order(2)
+	SecurityFilterChain webSecurityFilterChain(HttpSecurity http) throws Exception {
+		http
+				.authorizeHttpRequests(auth -> auth
+						.requestMatchers("/css/**", "/login", "/register", "/error").permitAll()
+						.requestMatchers(HttpMethod.POST, "/register").permitAll()
+						.requestMatchers(HttpMethod.GET, "/").permitAll()
+						.anyRequest().authenticated())
+				.formLogin(form -> form
+						.loginPage("/login")
+						.defaultSuccessUrl("/dashboard", true)
+						.permitAll())
+				.logout(logout -> logout
+						.logoutUrl("/logout")
+						.logoutSuccessUrl("/login?logout")
+						.permitAll());
+		return http.build();
+	}
+
 	@Bean
 	PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
 	}
-
 }
