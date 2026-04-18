@@ -30,6 +30,9 @@ public class User {
 
 	private LocalDate userDob;
 
+	/** UML: user_add (kept alongside userAddress for compatibility). */
+	private String userAdd;
+
 	private String userAddress;
 
 	/** Stored as BCrypt hash; required for login / JWT issuance. */

@@ -8,5 +8,6 @@ public record UserResponse(
 		String userName,
 		String userEmail,
 		LocalDate userDob,
+		String userAdd,
 		String userAddress) {
 }

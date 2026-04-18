@@ -3,6 +3,8 @@ package com.hospital.auth.service;
 import java.util.List;
 import java.util.stream.Stream;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +21,8 @@ import com.hospital.auth.repository.UserRepository;
 @Service
 public class UserService {
 
+	private static final Logger log = LoggerFactory.getLogger(UserService.class);
+
 	private final UserRepository userRepository;
 	private final RoleRepository roleRepository;
 	private final PasswordEncoder passwordEncoder;
@@ -30,6 +34,7 @@ public class UserService {
 	}
 
 	public UserResponse addUser(UserRequest request) {
+		log.info("Adding user: email='{}', requestedRoleId='{}'", request.userEmail(), request.userRoleId());
 		userRepository.findByUserEmailIgnoreCase(request.userEmail()).ifPresent(u -> {
 			throw new DuplicateResourceException("Email already registered: " + request.userEmail());
 		});
@@ -39,14 +44,17 @@ public class UserService {
 				.userEmail(request.userEmail().trim().toLowerCase())
 				.userPassword(passwordEncoder.encode(request.userPassword()))
 				.userDob(request.userDob())
+				.userAdd(request.userAdd())
 				.userAddress(request.userAddress())
 				.userRoleId(roleId)
 				.build();
 		User saved = userRepository.save(user);
+		log.info("User created: userId='{}', roleId='{}'", saved.getUserId(), saved.getUserRoleId());
 		return toResponse(saved);
 	}
 
 	public UserResponse editUser(String userId, UserUpdateRequest request) {
+		log.info("Editing user: userId='{}'", userId);
 		User user = userRepository.findById(userId)
 				.orElseThrow(() -> new ResourceNotFoundException("User not found: " + userId));
 		if (request.userEmail() != null && !request.userEmail().isBlank()) {
@@ -67,6 +75,9 @@ public class UserService {
 		if (request.userDob() != null) {
 			user.setUserDob(request.userDob());
 		}
+		if (request.userAdd() != null) {
+			user.setUserAdd(request.userAdd());
+		}
 		if (request.userAddress() != null) {
 			user.setUserAddress(request.userAddress());
 		}
@@ -75,13 +86,17 @@ public class UserService {
 					.orElseThrow(() -> new ResourceNotFoundException("Role not found: " + request.userRoleId()));
 			user.setUserRoleId(request.userRoleId());
 		}
-		return toResponse(userRepository.save(user));
+		User saved = userRepository.save(user);
+		log.info("User updated: userId='{}', roleId='{}'", saved.getUserId(), saved.getUserRoleId());
+		return toResponse(saved);
 	}
 
 	public void deleteUser(String userId) {
+		log.info("Deleting user: userId='{}'", userId);
 		User user = userRepository.findById(userId)
 				.orElseThrow(() -> new ResourceNotFoundException("User not found: " + userId));
 		userRepository.delete(user);
+		log.info("User deleted: userId='{}'", userId);
 	}
 
 	public UserResponse getUser(String userId) {
@@ -91,7 +106,9 @@ public class UserService {
 	}
 
 	public List<UserResponse> listUsers() {
-		return userRepository.findAll().stream().map(this::toResponse).toList();
+		List<UserResponse> users = userRepository.findAll().stream().map(this::toResponse).toList();
+		log.debug("Listed users count={}", users.size());
+		return users;
 	}
 
 	public List<UserResponse> searchUsers(String name, String email) {
@@ -112,7 +129,9 @@ public class UserService {
 		else {
 			stream = userRepository.findByUserEmailContainingIgnoreCase(e).stream();
 		}
-		return stream.map(this::toResponse).toList();
+		List<UserResponse> users = stream.map(this::toResponse).toList();
+		log.debug("Searched users: name='{}', email='{}', matched={}", name, email, users.size());
+		return users;
 	}
 
 	public User getUserEntity(String userId) {
@@ -143,6 +162,7 @@ public class UserService {
 				user.getUserName(),
 				user.getUserEmail(),
 				user.getUserDob(),
+				user.getUserAdd(),
 				user.getUserAddress());
 	}
 }

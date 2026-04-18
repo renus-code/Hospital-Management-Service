@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1"/>
+	<title>New doctor</title>
+	<link rel="stylesheet" th:href="@{/css/app.css}"/>
+</head>
+<body>
+	<div th:replace="~{fragments :: navbar}"></div>
+	<main>
+		<div class="card">
+			<h1>New doctor</h1>
+			<form th:action="@{/doctors}" th:object="${doctorRequest}" method="post" class="form-grid">
+				<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+				<div>
+					<label for="doctorsName">Name</label>
+					<input id="doctorsName" type="text" th:field="*{doctorsName}" required="required"/>
+					<p class="field-error" th:if="${#fields.hasErrors('doctorsName')}" th:errors="*{doctorsName}"></p>
+				</div>
+				<div>
+					<label for="doctorsMobile">Mobile</label>
+					<input id="doctorsMobile" type="text" th:field="*{doctorsMobile}" required="required"/>
+				</div>
+				<div>
+					<label for="doctorsEmail">Email</label>
+					<input id="doctorsEmail" type="email" th:field="*{doctorsEmail}" required="required"/>
+					<p class="field-error" th:if="${#fields.hasErrors('doctorsEmail')}" th:errors="*{doctorsEmail}"></p>
+				</div>
+				<div>
+					<label for="doctorsAddress">Address</label>
+					<textarea id="doctorsAddress" th:field="*{doctorsAddress}" rows="2"></textarea>
+				</div>
+				<div>
+					<label for="doctorsUsername">Username (sign-in)</label>
+					<input id="doctorsUsername" type="text" th:field="*{doctorsUsername}" required="required" autocomplete="username"/>
+				</div>
+				<div>
+					<label for="doctorsPassword">Password</label>
+					<input id="doctorsPassword" type="password" th:field="*{doctorsPassword}" required="required" autocomplete="new-password"/>
+				</div>
+				<div>
+					<button type="submit" class="btn btn-primary">Create</button>
+					<a class="btn btn-secondary" th:href="@{/doctors}">Cancel</a>
+				</div>
+			</form>
+		</div>
+	</main>
+</body>
+</html>

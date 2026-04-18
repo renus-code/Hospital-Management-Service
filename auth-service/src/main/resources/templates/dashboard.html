@@ -3,7 +3,7 @@
 <head>
 	<meta charset="UTF-8"/>
 	<meta name="viewport" content="width=device-width, initial-scale=1"/>
-	<title>Dashboard — HMS Auth</title>
+	<title>Dashboard — HMS</title>
 	<link rel="stylesheet" th:href="@{/css/app.css}"/>
 </head>
 <body>
@@ -12,9 +12,20 @@
 		<div class="card">
 			<h1>Dashboard</h1>
 			<p>Signed in as <strong th:text="${username}">user</strong></p>
-			<p class="muted">Manage roles, users, and permissions from the navigation bar. REST clients can still use JWT on <code>/api/**</code> endpoints.</p>
+			<p class="muted">
+				Hospital backend (REST on port 8082):
+				<strong th:text="${hospitalIntegrationOk} ? 'reachable' : 'unreachable'">reachable</strong>.
+				Patient backend (REST on port 8083):
+				<strong th:text="${patientIntegrationOk} ? 'reachable' : 'unreachable'">reachable</strong>.
+				Use <strong>Hospitals</strong>, <strong>Doctors</strong>, and <strong>Patients</strong> in the nav for the main app flows.
+			</p>
 			<div style="margin-top:1rem;display:flex;flex-wrap:wrap;gap:0.5rem;">
-				<a class="btn btn-primary" th:href="@{/roles}">Roles</a>
+				<a class="btn btn-primary" th:href="@{/hospitals}">Hospitals</a>
+				<a class="btn btn-primary" th:href="@{/doctors}">Doctors</a>
+				<a class="btn btn-primary" th:href="@{/patients}">Patients</a>
+				<a class="btn btn-primary" th:href="@{/appointments}">Appointments</a>
+				<a class="btn btn-primary" th:href="@{/medicines}">Medicines</a>
+				<a class="btn btn-secondary" th:href="@{/roles}">Roles</a>
 				<a class="btn btn-secondary" th:href="@{/users}">Users</a>
 				<a class="btn btn-secondary" th:href="@{/permissions}">Permissions</a>
 			</div>

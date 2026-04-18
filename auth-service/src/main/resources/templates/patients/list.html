@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1"/>
+	<title>Patients</title>
+	<link rel="stylesheet" th:href="@{/css/app.css}"/>
+</head>
+<body>
+	<div th:replace="~{fragments :: navbar}"></div>
+	<main>
+		<div class="alert alert-error" th:if="${errorMessage}" th:text="${errorMessage}"></div>
+		<div class="page-header">
+			<h1>Patients</h1>
+			<a class="btn btn-primary" th:href="@{/patients/new}">Add patient</a>
+		</div>
+		<div class="card">
+			<table class="data-table">
+				<thead>
+					<tr>
+						<th>Name</th>
+						<th>Username</th>
+						<th>Email</th>
+						<th>Mobile</th>
+						<th>Hospital id</th>
+						<th>Doctor id</th>
+						<th></th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="p : ${patients}">
+						<td th:text="${p.patientName}"></td>
+						<td th:text="${p.patientUsername}"></td>
+						<td th:text="${p.patientEmail}"></td>
+						<td th:text="${p.patientMobile}"></td>
+						<td class="muted" th:text="${p.hospitalId}"></td>
+						<td class="muted" th:text="${p.doctorId}"></td>
+						<td class="actions">
+							<a class="btn btn-secondary btn-sm" th:href="@{/patients/{id}/edit(id=${p.patientId})}">Edit</a>
+							<form th:action="@{/patients/{id}/delete(id=${p.patientId})}" method="post" style="display:inline;">
+								<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+								<button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Delete patient?');">Delete</button>
+							</form>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</main>
+</body>
+</html>

@@ -9,6 +9,7 @@ public record UserUpdateRequest(
 		@Email String userEmail,
 		String userPassword,
 		LocalDate userDob,
+		String userAdd,
 		String userAddress,
 		String userRoleId) {
 }

@@ -1,6 +1,9 @@
 package com.hospital.auth.controller;
 
+import java.util.Map;
+
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,6 +25,12 @@ public class AuthController {
 
 	public AuthController(AuthService authService) {
 		this.authService = authService;
+	}
+
+	/** Permit-all health for other microservices (RestTemplate connectivity checks). */
+	@GetMapping("/ping")
+	public Map<String, String> ping() {
+		return Map.of("service", "auth-service", "status", "UP");
 	}
 
 	@PostMapping("/login")

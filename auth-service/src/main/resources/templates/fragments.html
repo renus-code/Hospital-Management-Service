@@ -2,9 +2,13 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <body>
 	<nav th:fragment="navbar" class="navbar">
-		<a class="navbar-brand" th:href="@{/dashboard}">HMS Auth</a>
+		<a class="navbar-brand" th:href="@{/dashboard}">HMS</a>
 		<div class="nav-links" sec:authorize="isAuthenticated()">
-			<a th:href="@{/dashboard}">Dashboard</a>
+			<a th:href="@{/hospitals}">Hospitals</a>
+			<a th:href="@{/doctors}">Doctors</a>
+			<a th:href="@{/patients}">Patients</a>
+			<a th:href="@{/appointments}">Appointments</a>
+			<a th:href="@{/medicines}">Medicines</a>
 			<a th:href="@{/roles}">Roles</a>
 			<a th:href="@{/users}">Users</a>
 			<a th:href="@{/permissions}">Permissions</a>

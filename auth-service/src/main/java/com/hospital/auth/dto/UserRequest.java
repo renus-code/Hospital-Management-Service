@@ -10,6 +10,7 @@ public record UserRequest(
 		@NotBlank @Email String userEmail,
 		@NotBlank String userPassword,
 		LocalDate userDob,
+		String userAdd,
 		String userAddress,
 		String userRoleId) {
 }

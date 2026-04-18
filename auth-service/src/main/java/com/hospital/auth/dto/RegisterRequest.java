@@ -10,6 +10,7 @@ public record RegisterRequest(
 		@NotBlank @Email String userEmail,
 		@NotBlank String userPassword,
 		LocalDate userDob,
+		String userAdd,
 		String userAddress,
 		/** Optional; defaults to USER role if omitted. */
 		String userRoleId) {

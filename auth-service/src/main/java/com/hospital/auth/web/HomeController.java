@@ -11,7 +11,7 @@ public class HomeController {
 	public String home(Authentication authentication) {
 		if (authentication != null && authentication.isAuthenticated()
 				&& !"anonymousUser".equals(authentication.getPrincipal())) {
-			return "redirect:/dashboard";
+			return "redirect:/hospitals";
 		}
 		return "redirect:/login";
 	}

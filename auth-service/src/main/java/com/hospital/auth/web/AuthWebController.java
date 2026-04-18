@@ -61,6 +61,7 @@ public class AuthWebController {
 				form.getUserPassword(),
 				form.getUserDob(),
 				form.getUserAddress(),
+				form.getUserAddress(),
 				roleId);
 		authService.register(request);
 		redirectAttributes.addFlashAttribute("successMessage", "Account created. Please sign in.");

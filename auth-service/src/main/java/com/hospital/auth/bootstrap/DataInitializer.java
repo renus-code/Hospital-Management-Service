@@ -17,20 +17,25 @@ public class DataInitializer implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) {
-		if (roleRepository.count() > 0) {
-			return;
+		if (roleRepository.count() == 0) {
+			roleRepository.save(Role.builder()
+					.roleTitle("ADMIN")
+					.roleDescription("Full system administration")
+					.build());
+			roleRepository.save(Role.builder()
+					.roleTitle("USER")
+					.roleDescription("Standard application user")
+					.build());
+			roleRepository.save(Role.builder()
+					.roleTitle("DOCTOR")
+					.roleDescription("Hospital doctor role")
+					.build());
 		}
-		roleRepository.save(Role.builder()
-				.roleTitle("ADMIN")
-				.roleDescription("Full system administration")
-				.build());
-		roleRepository.save(Role.builder()
-				.roleTitle("USER")
-				.roleDescription("Standard application user")
-				.build());
-		roleRepository.save(Role.builder()
-				.roleTitle("DOCTOR")
-				.roleDescription("Hospital doctor role")
-				.build());
+		if (roleRepository.findAll().stream().noneMatch(r -> "PATIENT".equalsIgnoreCase(r.getRoleTitle()))) {
+			roleRepository.save(Role.builder()
+					.roleTitle("PATIENT")
+					.roleDescription("Patient portal role")
+					.build());
+		}
 	}
 }

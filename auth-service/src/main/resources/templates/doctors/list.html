@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1"/>
+	<title>Doctors</title>
+	<link rel="stylesheet" th:href="@{/css/app.css}"/>
+</head>
+<body>
+	<div th:replace="~{fragments :: navbar}"></div>
+	<main>
+		<div class="alert alert-error" th:if="${errorMessage}" th:text="${errorMessage}"></div>
+		<div class="page-header">
+			<h1>Doctors</h1>
+			<a class="btn btn-primary" th:href="@{/doctors/new}">Add doctor</a>
+		</div>
+		<div class="card">
+			<table class="data-table">
+				<thead>
+					<tr>
+						<th>Name</th>
+						<th>Email</th>
+						<th>Mobile</th>
+						<th>Username</th>
+						<th></th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="d : ${doctors}">
+						<td th:text="${d.doctorsName}"></td>
+						<td th:text="${d.doctorsEmail}"></td>
+						<td th:text="${d.doctorsMobile}"></td>
+						<td th:text="${d.doctorsUsername}"></td>
+						<td class="actions">
+							<a class="btn btn-secondary btn-sm" th:href="@{/doctors/{id}/edit(id=${d.doctorsId})}">Edit</a>
+							<form th:action="@{/doctors/{id}/delete(id=${d.doctorsId})}" method="post" style="display:inline;">
+								<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+								<button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Delete?');">Delete</button>
+							</form>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</main>
+</body>
+</html>

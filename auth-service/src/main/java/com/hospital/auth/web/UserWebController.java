@@ -62,6 +62,7 @@ public class UserWebController {
 				form.getUserPassword(),
 				form.getUserDob(),
 				form.getUserAddress(),
+				form.getUserAddress(),
 				roleId));
 		return "redirect:/users";
 	}
@@ -105,6 +106,7 @@ public class UserWebController {
 				form.getUserEmail(),
 				pwd,
 				form.getUserDob(),
+				form.getUserAddress(),
 				form.getUserAddress(),
 				roleId));
 		return "redirect:/users";

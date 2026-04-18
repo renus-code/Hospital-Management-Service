@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1"/>
+	<title th:text="${editMode == true} ? 'Edit patient' : 'New patient'">Patient</title>
+	<link rel="stylesheet" th:href="@{/css/app.css}"/>
+</head>
+<body>
+	<div th:replace="~{fragments :: navbar}"></div>
+	<main>
+		<div class="card">
+			<h1 th:text="${editMode == true} ? 'Edit patient' : 'New patient'">Patient</h1>
+			<form th:object="${patientRequest}"
+				  th:action="${editMode == true} ? @{/patients/{id}(id=${patientId})} : @{/patients}"
+				  method="post"
+				  class="form-grid">
+				<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+				<div>
+					<label for="patientName">Name</label>
+					<input id="patientName" type="text" th:field="*{patientName}" required="required"/>
+					<p class="field-error" th:if="${#fields.hasErrors('patientName')}" th:errors="*{patientName}"></p>
+				</div>
+				<div>
+					<label for="patientUsername">Username (sign-in)</label>
+					<input id="patientUsername" type="text" th:field="*{patientUsername}" required="required" autocomplete="username"/>
+					<p class="field-error" th:if="${#fields.hasErrors('patientUsername')}" th:errors="*{patientUsername}"></p>
+				</div>
+				<div th:if="${editMode != true}">
+					<label for="patientPassword">Password</label>
+					<input id="patientPassword" type="password" th:field="*{patientPassword}" autocomplete="new-password"/>
+					<p class="field-error" th:if="${#fields.hasErrors('patientPassword')}" th:errors="*{patientPassword}"></p>
+				</div>
+				<div th:if="${editMode == true}">
+					<label for="patientPasswordEdit">New password (optional)</label>
+					<input id="patientPasswordEdit" type="password" th:field="*{patientPassword}" autocomplete="new-password"/>
+				</div>
+				<div>
+					<label for="patientDob">Date of birth</label>
+					<input id="patientDob" type="date" th:field="*{patientDob}"/>
+				</div>
+				<div>
+					<label for="patientGender">Gender</label>
+					<select id="patientGender" th:field="*{patientGender}">
+						<option value="">-- Select --</option>
+						<option value="Male">Male</option>
+						<option value="Female">Female</option>
+						<option value="Other">Other</option>
+					</select>
+				</div>
+				<div>
+					<label for="patientMobile">Mobile</label>
+					<input id="patientMobile" type="text" th:field="*{patientMobile}"/>
+					<p class="field-error" th:if="${#fields.hasErrors('patientMobile')}" th:errors="*{patientMobile}"></p>
+				</div>
+				<div>
+					<label for="patientEmail">Email</label>
+					<input id="patientEmail" type="email" th:field="*{patientEmail}"/>
+					<p class="field-error" th:if="${#fields.hasErrors('patientEmail')}" th:errors="*{patientEmail}"></p>
+				</div>
+				<div>
+					<label for="patientBloodGroup">Blood group</label>
+					<input id="patientBloodGroup" type="text" th:field="*{patientBloodGroup}"/>
+				</div>
+				<div>
+					<label for="patientAddress">Address</label>
+					<textarea id="patientAddress" th:field="*{patientAddress}" rows="2"></textarea>
+				</div>
+				<div>
+					<label for="patientMedicalHistory">Medical history</label>
+					<textarea id="patientMedicalHistory" th:field="*{patientMedicalHistory}" rows="2"></textarea>
+				</div>
+				<div>
+					<label for="hospitalId">Linked hospital</label>
+					<select id="hospitalId" th:field="*{hospitalId}">
+						<option value="">-- None --</option>
+						<option th:each="h : ${hospitals}" th:value="${h.hospitalId}" th:text="${h.hospitalName + ' (' + h.hospitalId + ')'}"></option>
+					</select>
+				</div>
+				<div>
+					<label for="doctorId">Linked doctor</label>
+					<select id="doctorId" th:field="*{doctorId}">
+						<option value="">-- None --</option>
+						<option th:each="d : ${doctors}" th:value="${d.doctorsId}" th:text="${d.doctorsName + ' (' + d.doctorsId + ')'}"></option>
+					</select>
+				</div>
+				<div>
+					<button type="submit" class="btn btn-primary">Save</button>
+					<a class="btn btn-secondary" th:href="@{/patients}">Cancel</a>
+				</div>
+			</form>
+		</div>
+	</main>
+</body>
+</html>
