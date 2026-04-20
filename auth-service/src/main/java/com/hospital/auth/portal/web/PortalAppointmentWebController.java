@@ -1,5 +1,6 @@
 package com.hospital.auth.portal.web;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -44,6 +45,7 @@ public class PortalAppointmentWebController {
 	}
 
 	@GetMapping("/new")
+	@PreAuthorize("hasAnyRole('ADMIN','DOCTOR')")
 	public String createForm(HttpSession session, RedirectAttributes ra, Model model) {
 		String token = PortalSessionSupport.requireToken(session, ra);
 		if (token == null) {
@@ -60,6 +62,7 @@ public class PortalAppointmentWebController {
 	}
 
 	@GetMapping("/{appointmentId}/edit")
+	@PreAuthorize("hasAnyRole('ADMIN','DOCTOR')")
 	public String editForm(@PathVariable String appointmentId, HttpSession session, RedirectAttributes ra, Model model) {
 		String token = PortalSessionSupport.requireToken(session, ra);
 		if (token == null) {
@@ -87,6 +90,7 @@ public class PortalAppointmentWebController {
 	}
 
 	@PostMapping
+	@PreAuthorize("hasAnyRole('ADMIN','DOCTOR')")
 	public String create(
 			@Valid @ModelAttribute("appointmentRequest") AppointmentFormPayload request,
 			BindingResult bindingResult,
@@ -113,6 +117,7 @@ public class PortalAppointmentWebController {
 	}
 
 	@PostMapping("/{appointmentId}")
+	@PreAuthorize("hasAnyRole('ADMIN','DOCTOR')")
 	public String update(
 			@PathVariable String appointmentId,
 			@Valid @ModelAttribute("appointmentRequest") AppointmentFormPayload request,
@@ -141,6 +146,7 @@ public class PortalAppointmentWebController {
 	}
 
 	@PostMapping("/{appointmentId}/delete")
+	@PreAuthorize("hasRole('ADMIN')")
 	public String delete(@PathVariable String appointmentId, HttpSession session, RedirectAttributes ra) {
 		String token = PortalSessionSupport.requireToken(session, ra);
 		if (token == null) {

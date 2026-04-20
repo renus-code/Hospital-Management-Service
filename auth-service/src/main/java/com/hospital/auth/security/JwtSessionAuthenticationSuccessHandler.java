@@ -23,7 +23,7 @@ public class JwtSessionAuthenticationSuccessHandler extends SimpleUrlAuthenticat
 
 	public JwtSessionAuthenticationSuccessHandler(JwtService jwtService) {
 		this.jwtService = jwtService;
-		setDefaultTargetUrl("/hospitals");
+		setDefaultTargetUrl("/dashboard");
 		setAlwaysUseDefaultTargetUrl(true);
 	}
 

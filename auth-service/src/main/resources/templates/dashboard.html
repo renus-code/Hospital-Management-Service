@@ -11,15 +11,19 @@
 	<main>
 		<div class="card">
 			<h1>Dashboard</h1>
-			<p>Signed in as <strong th:text="${username}">user</strong></p>
+			<p>Signed in as <strong th:text="${username}">user</strong>
+				(<span sec:authorize="hasRole('ADMIN')">Admin</span>
+				<span sec:authorize="hasRole('DOCTOR')">Doctor</span>
+				<span sec:authorize="hasRole('PATIENT')">Patient</span>)
+			</p>
 			<p class="muted">
 				Hospital backend (REST on port 8082):
 				<strong th:text="${hospitalIntegrationOk} ? 'reachable' : 'unreachable'">reachable</strong>.
 				Patient backend (REST on port 8083):
 				<strong th:text="${patientIntegrationOk} ? 'reachable' : 'unreachable'">reachable</strong>.
-				Use <strong>Hospitals</strong>, <strong>Doctors</strong>, and <strong>Patients</strong> in the nav for the main app flows.
 			</p>
-			<div style="margin-top:1rem;display:flex;flex-wrap:wrap;gap:0.5rem;">
+
+			<div sec:authorize="hasRole('ADMIN')" style="margin-top:1rem;display:flex;flex-wrap:wrap;gap:0.5rem;">
 				<a class="btn btn-primary" th:href="@{/hospitals}">Hospitals</a>
 				<a class="btn btn-primary" th:href="@{/doctors}">Doctors</a>
 				<a class="btn btn-primary" th:href="@{/patients}">Patients</a>
@@ -28,6 +32,18 @@
 				<a class="btn btn-secondary" th:href="@{/roles}">Roles</a>
 				<a class="btn btn-secondary" th:href="@{/users}">Users</a>
 				<a class="btn btn-secondary" th:href="@{/permissions}">Permissions</a>
+			</div>
+
+			<div sec:authorize="hasRole('DOCTOR')" style="margin-top:1rem;display:flex;flex-wrap:wrap;gap:0.5rem;">
+				<a class="btn btn-primary" th:href="@{/patients}">My Patients</a>
+				<a class="btn btn-primary" th:href="@{/appointments}">Appointments</a>
+				<a class="btn btn-primary" th:href="@{/medicines}">Medicines</a>
+			</div>
+
+			<div sec:authorize="hasRole('PATIENT')" style="margin-top:1rem;display:flex;flex-wrap:wrap;gap:0.5rem;">
+				<a class="btn btn-primary" th:href="@{/doctors}">Doctors</a>
+				<a class="btn btn-primary" th:href="@{/appointments}">My Appointments</a>
+				<a class="btn btn-primary" th:href="@{/medicines}">Medicines</a>
 			</div>
 		</div>
 	</main>

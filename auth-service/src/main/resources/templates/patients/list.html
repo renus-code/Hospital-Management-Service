@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
 	<meta charset="UTF-8"/>
 	<meta name="viewport" content="width=device-width, initial-scale=1"/>
@@ -12,7 +12,7 @@
 		<div class="alert alert-error" th:if="${errorMessage}" th:text="${errorMessage}"></div>
 		<div class="page-header">
 			<h1>Patients</h1>
-			<a class="btn btn-primary" th:href="@{/patients/new}">Add patient</a>
+			<a sec:authorize="hasRole('ADMIN')" class="btn btn-primary" th:href="@{/patients/new}">Add patient</a>
 		</div>
 		<div class="card">
 			<table class="data-table">
@@ -35,13 +35,14 @@
 						<td th:text="${p.patientMobile}"></td>
 						<td class="muted" th:text="${p.hospitalId}"></td>
 						<td class="muted" th:text="${p.doctorId}"></td>
-						<td class="actions">
+						<td class="actions" sec:authorize="hasRole('ADMIN')">
 							<a class="btn btn-secondary btn-sm" th:href="@{/patients/{id}/edit(id=${p.patientId})}">Edit</a>
 							<form th:action="@{/patients/{id}/delete(id=${p.patientId})}" method="post" style="display:inline;">
 								<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
 								<button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Delete patient?');">Delete</button>
 							</form>
 						</td>
+						<td class="actions muted" sec:authorize="!hasRole('ADMIN')">&mdash;</td>
 					</tr>
 				</tbody>
 			</table>

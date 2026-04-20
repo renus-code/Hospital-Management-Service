@@ -54,14 +54,31 @@ public class SecurityConfig {
 		http
 				.authenticationProvider(unifiedFormLoginAuthenticationProvider)
 				.authorizeHttpRequests(auth -> auth
-						.requestMatchers("/css/**", "/login", "/register", "/error").permitAll()
+						.requestMatchers("/css/**", "/login", "/register", "/error", "/access-denied").permitAll()
 						.requestMatchers(HttpMethod.POST, "/register").permitAll()
 						.requestMatchers(HttpMethod.GET, "/").permitAll()
+
+						// ADMIN-only: full admin console
+						.requestMatchers("/hospitals/**").hasRole("ADMIN")
+						.requestMatchers("/roles/**").hasRole("ADMIN")
+						.requestMatchers("/users/**").hasRole("ADMIN")
+						.requestMatchers("/permissions/**").hasRole("ADMIN")
+
+						// Doctor & Patient mgmt
+						.requestMatchers("/patients/**").hasAnyRole("ADMIN", "DOCTOR")
+						.requestMatchers("/doctors/**").hasAnyRole("ADMIN", "PATIENT")
+
+						// Shared modules
+						.requestMatchers("/appointments/**").hasAnyRole("ADMIN", "DOCTOR", "PATIENT")
+						.requestMatchers("/medicines/**").hasAnyRole("ADMIN", "DOCTOR", "PATIENT")
+
 						.anyRequest().authenticated())
 				.formLogin(form -> form
 						.loginPage("/login")
 						.successHandler(jwtSessionAuthenticationSuccessHandler)
 						.permitAll())
+				.exceptionHandling(ex -> ex
+						.accessDeniedPage("/access-denied"))
 				.logout(logout -> logout
 						.logoutUrl("/logout")
 						.logoutSuccessUrl("/login?logout")

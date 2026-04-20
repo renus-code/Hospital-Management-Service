@@ -1,5 +1,6 @@
 package com.hospital.auth.portal.web;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -48,6 +49,7 @@ public class PortalPatientWebController {
 	}
 
 	@GetMapping("/new")
+	@PreAuthorize("hasRole('ADMIN')")
 	public String createForm(HttpSession session, RedirectAttributes ra, Model model) {
 		String token = PortalSessionSupport.requireToken(session, ra);
 		if (token == null) {
@@ -65,6 +67,7 @@ public class PortalPatientWebController {
 	}
 
 	@GetMapping("/{patientId}/edit")
+	@PreAuthorize("hasRole('ADMIN')")
 	public String editForm(@PathVariable String patientId, HttpSession session, RedirectAttributes ra, Model model) {
 		String token = PortalSessionSupport.requireToken(session, ra);
 		if (token == null) {
@@ -99,6 +102,7 @@ public class PortalPatientWebController {
 	}
 
 	@PostMapping
+	@PreAuthorize("hasRole('ADMIN')")
 	public String create(
 			@Valid @ModelAttribute("patientRequest") PatientFormPayload request,
 			BindingResult bindingResult,
@@ -129,6 +133,7 @@ public class PortalPatientWebController {
 	}
 
 	@PostMapping("/{patientId}")
+	@PreAuthorize("hasRole('ADMIN')")
 	public String update(
 			@PathVariable String patientId,
 			@Valid @ModelAttribute("patientRequest") PatientFormPayload request,
@@ -158,6 +163,7 @@ public class PortalPatientWebController {
 	}
 
 	@PostMapping("/{patientId}/delete")
+	@PreAuthorize("hasRole('ADMIN')")
 	public String delete(@PathVariable String patientId, HttpSession session, RedirectAttributes ra) {
 		String token = PortalSessionSupport.requireToken(session, ra);
 		if (token == null) {
